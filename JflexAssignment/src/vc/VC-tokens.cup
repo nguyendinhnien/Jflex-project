@@ -7,43 +7,44 @@
 
 import java_cup.runtime.*;
 
-terminal AND;
-terminal ARRAY;
-terminal BEGIN;
+terminal IDENTIFIER;
+terminal FLOATING_POINT_LITERAL;
+terminal INTEGER_LITERAL;
+terminal BOOLEAN;
+terminal BREAK;
+terminal CONTINUE;
 terminal ELSE;
-terminal END;
+terminal FLOAT;
+terminal FOR;
+terminal INT;
 terminal IF;
-terminal OF;
-terminal OR;
-terminal PROGRAM;
-terminal PROCEDURE;
-terminal THEN;
-terminal TYPE;
-terminal VAR;
-terminal TIMES;
+terminal RETURN;
+terminal VOID;
+terminal WHILE;
+terminal BOOLEAN_LITERAL;
+terminal LPAREN;
+terminal RPAREN;
+terminal LBRACE;
+terminal RBRACE;
+terminal LBRACK;
+terminal RBRACK;
+terminal SEMICOLON;
+terminal COMA;
+terminal EQ;
+terminal GT;
+terminal LT;
+terminal NOT;
+terminal NOTEQ;
+terminal EQEQ;
+terminal LTEQ;
+terminal GTEQ;
+terminal ANDAND;
+terminal OROR;
 terminal PLUS;
 terminal MINUS;
-terminal DIVIDE;
-terminal SEMI;
-terminal COMMA;
-terminal LEFT_PAREN;
-terminal RT_PAREN;
-terminal LEFT_BRKT;
-terminal RT_BRKT;
-terminal EQ;
-terminal GTR;
-terminal LESS;
-terminal LESS_EQ;
-terminal GTR_EQ;
-terminal NOT_EQ;
-terminal COLON;
-terminal ASSMNT;
-terminal DOT;
-terminal IDENT;
-terminal INT;
-terminal REAL;
-terminal CHAR;
-
+terminal MULT;
+terminal DIV;
+terminal STRING_LITERAL;
 
 /*-*
  * The following two lines define a dummy non-terminal and grammar rule.  CUP

@@ -16,8 +16,8 @@ public class JflexAssignment {
      */
     public static void main(String[] args) throws IOException {
         String dirInputFile = "C:\\Users\\nguyen\\Documents\\NetBeansProjects\\JflexAssignment\\src\\jflexassignment\\inputFile.txt";
-        InputStream inputStream = new FileInputStream(dirInputFile);
-        Sentence lexer = new Sentence(inputStream);
+        InputStream inputStream = new FileInputStream(dirInputFile); 
+        flexer lexer = new flexer(inputStream);
         lexer.yylex();
     }
 }

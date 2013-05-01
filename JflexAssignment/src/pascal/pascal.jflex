@@ -8,7 +8,7 @@
  *
  */
 
-
+package pascal;
 import java_cup.runtime.*;
 
 
@@ -65,12 +65,9 @@ whitespace      = [ \n\t]
 
 
 %%
-
-%state TEST
 /**
  * LEXICAL RULES:
  */
-
 begin           { return newSym(sym.BEGIN); }
 and             { return newSym(sym.AND); }
 array           { return newSym(sym.ARRAY); }

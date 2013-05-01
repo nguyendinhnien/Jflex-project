@@ -4,10 +4,12 @@
  * programming language.  
  *
  */
+package vc;
 
 import java_cup.runtime.*;
 
 %%
+
 /*-*
  * LEXICAL FUNCTIONS:
  */
@@ -25,7 +27,7 @@ import java_cup.runtime.*;
  * column numbers.
  */
 Symbol newSym(int tokenId) {
-    return new Symbol(tokenId, yyline, yycolumn);
+    return new Symbol(tokenId, yyline+1, yycolumn+1);
 }
 
 /**
@@ -35,7 +37,7 @@ Symbol newSym(int tokenId) {
  */
 
 Symbol newSym(int tokenId, Object value) {
-    return new Symbol(tokenId, yyline, yycolumn, value);
+    return new Symbol(tokenId, yyline+1, yycolumn+1, value);
 }
 
 %}
@@ -45,65 +47,77 @@ Symbol newSym(int tokenId, Object value) {
  * PATTERN DEFINITIONS:
  */
 
-letter          = [A-Za-z]
-digit           = [0-9]
-alphanumeric    = {letter}|{digit}
-other_id_char   = [_]
-identifier      = {letter}({alphanumeric}|{other_id_char})*
-integer         = {digit}*
-real            = {integer}\.{integer}
-char            = '.'
-leftbrace       = \{
-rightbrace      = \}
-nonrightbrace   = [^}]
-comment_body    = {nonrightbrace}*
-comment         = {leftbrace}{comment_body}{rightbrace}
-whitespace      = [ \n\t]
+letter              =   [A-Za-z_]
+digit               =   [0-9]
+identifier          =   {letter}({letter}|{digit})*
+int_literal         =   {digit}{digit}*
+fraction            =   \.{digit}*
+exponent            =   (E|e)(\+|\-)?{digit}*
+bool_literal        =   (true|false)
+float_literal       =   ((({digit}* {fraction} {exponent}?))
+                        |({digit}+\.)
+                        |({digit}+\.? {exponent}))
 
+string_content      =   (\\\"|[^\n\r\"]|\\{white_space}+\\)*
+string_literal      =   {double_qoute}{string_content}{double_qoute}
+double_qoute        =   \"
 
+comment             = {trad_comment} | {line_comment} | {doc_comment}
+trad_comment        = "/*" [^*] ~"*/" | "/*" "*"+ "/"
+line_comment        = "//" ([^\r\n])* {newline}?
+doc_comment         = "/*" "*"+ [^/*] ~"*/"
+
+newline             =   \r|\n|\r\n
+white_space         =   [\n\r\ \t]
 %%
+
 /**
  * LEXICAL RULES:
  */
-and             { return newSym(sym.AND); }
-array           { return newSym(sym.ARRAY); }
-begin           { return newSym(sym.BEGIN); }
-else            { return newSym(sym.ELSE); }
-end             { return newSym(sym.END); }
-if              { return newSym(sym.IF); }
-of              { return newSym(sym.OF); }
-or              { return newSym(sym.OR); }
-program         { return newSym(sym.PROGRAM); }
-procedure       { return newSym(sym.PROCEDURE); }
-then            { return newSym(sym.THEN); }
-type            { return newSym(sym.TYPE); }
-var             { return newSym(sym.VAR); }
-"*"             { return newSym(sym.TIMES); }
-"+"             { return newSym(sym.PLUS); }
-"-"             { return newSym(sym.MINUS); }
-"/"             { return newSym(sym.DIVIDE); }
-";"             { return newSym(sym.SEMI); }
-","             { return newSym(sym.COMMA); }
-"("             { return newSym(sym.LEFT_PAREN); }
-")"             { return newSym(sym.RT_PAREN); }
-"["             { return newSym(sym.LEFT_BRKT); }
-"]"             { return newSym(sym.RT_BRKT); }
-"="             { return newSym(sym.EQ); }
-"<"             { return newSym(sym.GTR); }
-">"             { return newSym(sym.LESS); }
-"<="            { return newSym(sym.LESS_EQ); }
-">="            { return newSym(sym.GTR_EQ); }
-"!="            { return newSym(sym.NOT_EQ); }
-":"             { return newSym(sym.COLON); }
-":="            { return newSym(sym.ASSMNT); }
-"."             { return newSym(sym.DOT); }
-{identifier}    { return newSym(sym.IDENT, yytext()); }
-{integer}       { return newSym(sym.INT, new Integer(yytext())); }
-{real}          { return newSym(sym.REAL, new Double(yytext())); }
-{char}          { return newSym(sym.CHAR, new Character(yytext().charAt(1))); }
-{comment}       { /* For this stand-alone lexer, print out comments. */
-                  System.out.println("Recognized comment: " + yytext()); }
-{whitespace}    { /* Ignore whitespace. */ }
-.               { System.out.println("Illegal char, '" + yytext() +
-                    "' line: " + yyline + ", column: " + yychar); }
+    boolean             { return newSym(sym.BOOLEAN, yytext()); }
+    float               { return newSym(sym.FLOAT, yytext()); }
+    int                 { return newSym(sym.INT, yytext()); }
+    void                { return newSym(sym.VOID, yytext()); }
+    while               { return newSym(sym.WHILE, yytext()); }
+    break               { return newSym(sym.BREAK, yytext()); }
+    continue            { return newSym(sym.CONTINUE, yytext()); }
+    if                  { return newSym(sym.IF, yytext()); }
+    else                { return newSym(sym.ELSE, yytext()); }
+    for                 { return newSym(sym.FOR, yytext()); }
+    return              { return newSym(sym.RETURN, yytext()); }
 
+    "="                 { return newSym(sym.EQ, yytext()); }
+    "*"                 { return newSym(sym.MULT, yytext()); }
+    "+"                 { return newSym(sym.PLUS, yytext()); }
+    "-"                 { return newSym(sym.MINUS, yytext()); }
+    "/"                 { return newSym(sym.DIV, yytext()); }
+    "<"                 { return newSym(sym.LT, yytext()); }
+    "<="                { return newSym(sym.LTEQ, yytext()); }
+    ">"                 { return newSym(sym.GT, yytext()); }
+    ">="                { return newSym(sym.GTEQ, yytext()); }
+    "=="                { return newSym(sym.EQEQ, yytext()); }
+    "!="                { return newSym(sym.NOTEQ, yytext()); }
+    "&&"                { return newSym(sym.ANDAND, yytext()); }
+    "||"                { return newSym(sym.OROR, yytext()); }
+    "!"                 { return newSym(sym.NOT, yytext()); }
+    "{"                 { return newSym(sym.LBRACE, yytext()); }
+    "}"                 { return newSym(sym.RBRACE, yytext()); }
+    "("                 { return newSym(sym.LPAREN, yytext()); }
+    ")"                 { return newSym(sym.RPAREN, yytext()); }
+    "["                 { return newSym(sym.LBRACK, yytext()); }
+    "]"                 { return newSym(sym.RBRACK, yytext()); }
+    ";"                 { return newSym(sym.SEMICOLON, yytext()); }
+    ","                 { return newSym(sym.COMA, yytext()); }
+
+    {int_literal}       { return newSym(sym.INTEGER_LITERAL, new Integer(yytext())); }
+    {float_literal}     { return newSym(sym.FLOATING_POINT_LITERAL, new Double(yytext())); }
+    {string_literal}    { return newSym(sym.STRING_LITERAL, yytext().substring(1, yylength()-1)); }
+    {bool_literal}      { return newSym(sym.BOOLEAN_LITERAL, new Boolean(yytext())); }
+    {identifier}        { return newSym(sym.IDENTIFIER, yytext()); }
+
+
+    {comment}           { System.out.println("Comment recognize :\n" + yytext().substring(2, yylength()-2)); }
+    {white_space}        { /* Ignore whitespace. */ }
+    <<EOF>>             { return newSym(sym.EOF,"");}
+    .                   { System.out.println("Illegal char, '" + yytext() +
+                    "' line: " + yyline + ", column: " + yychar); }

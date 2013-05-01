@@ -1,0 +1,26 @@
+int f() { 
+    return 200;
+}
+
+int i = 1; 
+
+int main() { 
+    int main;
+    main = f();
+    putIntLn(i);
+    {   /* lksjdklfjsklf */
+        int i = 2;
+        int main; 
+        int f; 
+        main = f = 100;
+        putIntLn("In thu ");    
+        putIntLn(main);
+        putIntLn(f);
+// comment cai xem
+    }
+    putIntLn(main);
+}
+
+
+/*  aslkdas
+dasdasd sad */

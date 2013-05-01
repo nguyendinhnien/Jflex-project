@@ -1,0 +1,25 @@
+void thapHaNoi(int n, int source, int mid, int dest) {
+	if(n <= 0) {
+		return;
+	}
+	if(n == 1) {
+		putInt(source);
+		putString("->");
+		putIntLn(dest);
+		return;
+	}
+
+	thapHaNoi(n-1, source, dest, mid); // recursion
+	putInt(source);
+	putString("->");
+	putIntLn(dest);
+	thapHaNoi(n-1, mid, source, dest); // recursion
+}
+
+int main() {
+	int a;
+	putStringLn("Enter number of disk");
+	a = getInt();
+	putStringLn("Steps of movement");
+	thapHaNoi(a, 0, 1, 2);
+}

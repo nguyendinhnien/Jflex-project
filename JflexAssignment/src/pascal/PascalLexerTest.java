@@ -12,13 +12,16 @@
  *     java PascalLexerTest lexer-test.p
  *
  */
-
+package pascal;
 import java.io.*;
 import java_cup.runtime.*;
 
 public class PascalLexerTest {
 
     public static void main(String[] args) {
+        String dirJFile = "C:\\Users\\nguyen\\Documents\\NetBeansProjects\\JflexAssignment\\src\\pascal\\pascal.jflex";
+        File jflexFile = new File(dirJFile);
+        JFlex.Main.generate(jflexFile);        
         String dirFile = "C:\\Users\\nguyen\\Documents\\NetBeansProjects\\JflexAssignment\\src\\pascal\\lexer-test.p";
         Symbol sym;
         try {
